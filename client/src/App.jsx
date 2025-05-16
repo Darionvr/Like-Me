@@ -17,7 +17,7 @@ function App() {
   };
 
   const agregarPost = async () => {
-    const post = { titulo, url: imgSrc, descripcion };
+    const post = { titulo, img: imgSrc, descripcion };
     await axios.post(urlBaseServer + "/", post);
     getPosts();
   };
@@ -28,10 +28,18 @@ function App() {
     getPosts();
   };
 
-  // este método se utilizará en el siguiente desafío
+
   const eliminarPost = async (id) => {
-    await axios.delete(urlBaseServer + `/posts/${id}`);
+    try {
+    await axios.delete(urlBaseServer + `/${id}`);
     getPosts();
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      getPosts();
+    } else {
+      console.error(error);
+    }
+  }
   };
 
   useEffect(() => {
